@@ -10,6 +10,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.makeText
+import androidx.core.view.isVisible
 
 private const val TAG = "MainActivity"
 
@@ -30,7 +31,12 @@ class MainActivity : AppCompatActivity() {
         Question(R.string.question_africa, false),
         Question(R.string.question_americas, true),
         Question(R.string.question_asia, true))
+
     private var currentIndex = 0
+
+    private var responseBank = arrayOfNulls<Response>(questionBank.size)
+
+    private var countAnswers = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,17 +96,34 @@ class MainActivity : AppCompatActivity() {
         //currentIndex = (currentIndex + index) % questionBank.size
         val questionTextResId = questionBank[currentIndex].textResId
         questionTextView.setText(questionTextResId)
+        trueButton.isEnabled = responseBank[currentIndex]==null
+        falseButton.isEnabled = responseBank[currentIndex]==null
+
     }
 
     private fun checkAnswer(userAnswer: Boolean) {
         val correctAnswer = questionBank[currentIndex].answer
         val messageResId = if (userAnswer == correctAnswer) {
+            responseBank[currentIndex] = Response(questionBank[currentIndex],1)
             R.string.correct_toast
         } else {
+            responseBank[currentIndex] = Response(questionBank[currentIndex],0)
             R.string.incorrect_toast
         }
-        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
-            .show()
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
+        updateQuestion(1)
+        countAnswers++
+        if(countAnswers == responseBank.size){
+            showResult()
+        }
+    }
+
+    private fun showResult(){
+        var i =0.0
+        responseBank.forEach { element ->
+            i = element!!.answer + i
+        }
+        Toast.makeText(this, ((i/countAnswers)*100).toString(), Toast.LENGTH_SHORT).show()
     }
 
     override fun onStart() {
@@ -127,5 +150,4 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         Log.d(TAG, "onDestroy() called")
     }
-
 }
