@@ -12,6 +12,7 @@ import android.widget.Toast.makeText
 class MainActivity : AppCompatActivity() {
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
+    private lateinit var prevButton: Button
     private lateinit var nextButton: Button
     private lateinit var questionTextView: TextView
 
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
+        prevButton = findViewById(R.id.prev_button)
         nextButton = findViewById(R.id.next_button)
         questionTextView = findViewById(R.id.question_text_view)
 
@@ -41,21 +43,33 @@ class MainActivity : AppCompatActivity() {
            checkAnswer(false)
         }
 
+        prevButton.setOnClickListener {
+            updateQuestion(-1)
+        }
+
         nextButton.setOnClickListener {
             //currentIndex = (currentIndex + 1) % questionBank.size
-            updateQuestion()
+            updateQuestion(1)
         }
 
         questionTextView.setOnClickListener {view: View ->
             //currentIndex = (currentIndex + 1) % questionBank.size
-            updateQuestion()
+            updateQuestion(1)
         }
 
-        updateQuestion()
+        updateQuestion(0)
     }
 
-    private fun updateQuestion() {
-        currentIndex = (currentIndex + 1) % questionBank.size
+    private fun updateQuestion(index: Int) {
+
+        if(currentIndex==0 && index==-1){
+            currentIndex = questionBank.size-1
+        }else{
+            currentIndex = (currentIndex + index) % questionBank.size
+        }
+
+        //currentIndex = (currentIndex + 1) % questionBank.size
+        //currentIndex = (currentIndex + index) % questionBank.size
         val questionTextResId = questionBank[currentIndex].textResId
         questionTextView.setText(questionTextResId)
     }
