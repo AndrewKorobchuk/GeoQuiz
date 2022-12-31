@@ -11,6 +11,8 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.makeText
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 
 private const val TAG = "MainActivity"
 
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var questionTextView: TextView
 
+
     private val questionBank = listOf(
         Question(R.string.question_australia, true),
         Question(R.string.question_oceans, true),
@@ -32,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         Question(R.string.question_americas, true),
         Question(R.string.question_asia, true))
 
-    private var currentIndex = 0
+    var currentIndex = 0
 
     private var responseBank = arrayOfNulls<Response>(questionBank.size)
 
@@ -42,6 +45,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
+
+        val provider: ViewModelProvider = ViewModelProviders.of(this)
+        val quizViewModel = provider.get(QuizViewModel::class.java)
+        Log.d(TAG, "Got a QuizViewModel: $quizViewModel")
 
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
