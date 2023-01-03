@@ -1,5 +1,6 @@
 package com.sherlock.androidprogramming4e.geoquiz
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var falseButton: Button
     private lateinit var prevButton: Button
     private lateinit var nextButton: Button
+    private lateinit var cheatButton: Button
     private lateinit var prevButtonImg: ImageButton
     private lateinit var nextButtonImg: ImageButton
 
@@ -56,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         falseButton = findViewById(R.id.false_button)
         prevButton = findViewById(R.id.prev_button)
         nextButton = findViewById(R.id.next_button)
+        cheatButton = findViewById(R.id.cheat_button)
         prevButtonImg = findViewById(R.id.prev_button_img)
         nextButtonImg = findViewById(R.id.next_button_img)
 
@@ -90,6 +93,10 @@ class MainActivity : AppCompatActivity() {
             updateQuestion(1)
         }
 
+        cheatButton.setOnClickListener{view: View ->
+            val answerIsTrue = quizViewModel.currentQuestionAnswer
+            val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
+            startActivity(intent)        }
         updateQuestion(0)
     }
 
