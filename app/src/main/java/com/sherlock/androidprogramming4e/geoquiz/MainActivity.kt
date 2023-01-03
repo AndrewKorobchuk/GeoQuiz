@@ -3,18 +3,15 @@ package com.sherlock.androidprogramming4e.geoquiz
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toast.makeText
-import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 
 private const val TAG = "MainActivity"
+private const val KEY_INDEX = "index"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var trueButton: Button
@@ -26,29 +23,34 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var questionTextView: TextView
 
+    //private var responseBank = arrayOfNulls<Response>(questionBank.size)
 
-    private val questionBank = listOf(
-        Question(R.string.question_australia, true),
-        Question(R.string.question_oceans, true),
-        Question(R.string.question_mideast, false),
-        Question(R.string.question_africa, false),
-        Question(R.string.question_americas, true),
-        Question(R.string.question_asia, true))
 
-    var currentIndex = 0
 
-    private var responseBank = arrayOfNulls<Response>(questionBank.size)
-
-    private var countAnswers = 0
+    /**
+     * Использование lazy допускает применение свойства quizViewModel как val, а не var.
+     * Это здорово, потому что вам нужно захватить и сохранить QuizViewModel,
+     * лишь когда создается экземпляр activity,
+     * поэтому quizViewModel получает значение только один раз.
+     * Что еще более важно, использование lazy означает, что расчет и назначение quizViewModel
+     * не будет происходить, пока вы не запросите доступ к quizViewModel впервые.
+     * Это хорошо, потому что вы не можете безопасно получить доступ к ViewModel до выполнения
+     * Activity.onCreate(...).
+     * Если вы пытаетесь вызвать ViewModelProviders.of(this).get(QuizViewModel::class.java) до
+     * Activity.onCreate(...), ваше приложение вылетит с исключением IllegalStateException.
+     */
+    private val quizViewModel: QuizViewModel by lazy {
+        ViewModelProviders.of(this).get(QuizViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
 
-        val provider: ViewModelProvider = ViewModelProviders.of(this)
-        val quizViewModel = provider.get(QuizViewModel::class.java)
-        Log.d(TAG, "Got a QuizViewModel: $quizViewModel")
+        val currentIndex = savedInstanceState?.getInt(KEY_INDEX, 0) ?: 0
+        quizViewModel.setCurrentIndex(currentIndex)
+
 
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
@@ -93,44 +95,34 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateQuestion(index: Int) {
 
-        if(currentIndex==0 && index==-1){
-            currentIndex = questionBank.size-1
-        }else{
-            currentIndex = (currentIndex + index) % questionBank.size
-        }
-
-        //currentIndex = (currentIndex + 1) % questionBank.size
-        //currentIndex = (currentIndex + index) % questionBank.size
-        val questionTextResId = questionBank[currentIndex].textResId
+        quizViewModel.move(index)
+        val questionTextResId = quizViewModel.currentQuestionText
         questionTextView.setText(questionTextResId)
-        trueButton.isEnabled = responseBank[currentIndex]==null
-        falseButton.isEnabled = responseBank[currentIndex]==null
-
+        trueButton.isEnabled = !quizViewModel.answerEnable()
+        falseButton.isEnabled = !quizViewModel.answerEnable()
     }
 
     private fun checkAnswer(userAnswer: Boolean) {
-        val correctAnswer = questionBank[currentIndex].answer
-        val messageResId = if (userAnswer == correctAnswer) {
-            responseBank[currentIndex] = Response(questionBank[currentIndex],1)
+
+
+        //val correctAnswer = quizViewModel.currentQuestionAnswer
+
+        val messageResId = if (quizViewModel.checkAnswer(userAnswer)) {
             R.string.correct_toast
         } else {
-            responseBank[currentIndex] = Response(questionBank[currentIndex],0)
             R.string.incorrect_toast
         }
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
         updateQuestion(1)
-        countAnswers++
-        if(countAnswers == responseBank.size){
+        if(quizViewModel.isAllAnswers()){
             showResult()
         }
     }
 
+
     private fun showResult(){
-        var i =0.0
-        responseBank.forEach { element ->
-            i = element!!.answer + i
-        }
-        Toast.makeText(this, ((i/countAnswers)*100).toString(), Toast.LENGTH_SHORT).show()
+        val result = quizViewModel.getResult()
+        Toast.makeText(this, result.toString(), Toast.LENGTH_SHORT).show()
     }
 
     override fun onStart() {
@@ -156,5 +148,11 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "onDestroy() called")
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        super.onSaveInstanceState(savedInstanceState)
+        Log.i(TAG, "onSaveInstanceState")
+        savedInstanceState.putInt(KEY_INDEX, quizViewModel.getCurrentIndex())
     }
 }
