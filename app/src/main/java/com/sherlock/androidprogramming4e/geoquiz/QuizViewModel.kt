@@ -19,6 +19,7 @@ class QuizViewModel : ViewModel(){
         Question(R.string.question_asia, true))
 
     private var currentIndex = 0
+    var isCheater = false
     private var responseBank = arrayOfNulls<Response>(questionBank.size)
     private var countAnswers = 0
     private var allAnswers = false
