@@ -29,10 +29,6 @@ class MainActivity : AppCompatActivity() {
 
     private var isCheater = false
 
-    //private var responseBank = arrayOfNulls<Response>(questionBank.size)
-
-
-
     /**
      * Использование lazy допускает применение свойства quizViewModel как val, а не var.
      * Это здорово, потому что вам нужно захватить и сохранить QuizViewModel,
@@ -193,7 +189,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-            //quizViewModel.isCheater = isCheater
         }
     }
 }

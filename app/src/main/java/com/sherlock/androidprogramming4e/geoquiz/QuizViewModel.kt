@@ -2,12 +2,6 @@ package com.sherlock.androidprogramming4e.geoquiz
 
 import androidx.lifecycle.ViewModel
 
-private const val TAG = "QuizViewModel"
-
-/**
- * Функция onCleared() вызывается непосредственно перед уничтожением ViewModel.
- * В этом месте удобно выполнять уборку мусора, например снимать наблюдение с источника данных.
- */
 class QuizViewModel : ViewModel(){
 
     private val questionBank = listOf(
@@ -19,7 +13,6 @@ class QuizViewModel : ViewModel(){
         Question(R.string.question_asia, true))
 
     private var currentIndex = 0
-    //var isCheater = false
     private var responseBank = arrayOfNulls<Response>(questionBank.size)
     private var countAnswers = 0
     private var allAnswers = false
@@ -51,11 +44,6 @@ class QuizViewModel : ViewModel(){
         }else {
             return responseBank[currentIndex]!!.isCheater
         }
-    }
-
-    fun setCheater(cheater: Boolean){
-        //responseBank[currentIndex] = Response(questionBank[currentIndex],0,cheater)
-        checkAnswer(false,true)
     }
 
     fun checkAnswer(userAnswer: Boolean, isCheater: Boolean): Boolean{
