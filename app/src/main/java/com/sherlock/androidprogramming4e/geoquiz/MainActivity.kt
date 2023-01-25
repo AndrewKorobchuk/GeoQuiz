@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var questionTextView: TextView
 
+    private var isCheater = false
+
     //private var responseBank = arrayOfNulls<Response>(questionBank.size)
 
 
@@ -116,18 +118,17 @@ class MainActivity : AppCompatActivity() {
 
         val correctAnswer = quizViewModel.currentQuestionAnswer
 
-
-        val messageResId_ = if (quizViewModel.checkAnswer(userAnswer)) {
+        val messageResId_ = if (quizViewModel.checkAnswer(userAnswer,false)) {
             R.string.correct_toast
         } else {
             R.string.incorrect_toast
         }
 
         val messageResId = when {
-            quizViewModel.isCheater -> R.string.judgment_toast
-            userAnswer == correctAnswer -> R.string.correct_toast
-            else -> R.string.incorrect_toast
-        }
+                quizViewModel.getCheater()==true -> R.string.judgment_toast
+                userAnswer == correctAnswer -> R.string.correct_toast
+                else -> R.string.incorrect_toast
+            }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
         updateQuestion(1)
@@ -180,8 +181,19 @@ class MainActivity : AppCompatActivity() {
             return
         }
         if (requestCode == REQUEST_CODE_CHEAT) {
-            quizViewModel.isCheater =
+            isCheater =
                 data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
+            if(isCheater){
+                if(quizViewModel.getCheater()==null) {
+                    quizViewModel.checkAnswer(false,true)
+                    trueButton.isEnabled = false
+                    falseButton.isEnabled = false
+                    if(quizViewModel.isAllAnswers()){
+                        showResult()
+                    }
+                }
+            }
+            //quizViewModel.isCheater = isCheater
         }
     }
 }

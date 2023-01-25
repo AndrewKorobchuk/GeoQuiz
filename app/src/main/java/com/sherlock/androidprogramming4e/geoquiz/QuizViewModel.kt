@@ -19,7 +19,7 @@ class QuizViewModel : ViewModel(){
         Question(R.string.question_asia, true))
 
     private var currentIndex = 0
-    var isCheater = false
+    //var isCheater = false
     private var responseBank = arrayOfNulls<Response>(questionBank.size)
     private var countAnswers = 0
     private var allAnswers = false
@@ -45,16 +45,33 @@ class QuizViewModel : ViewModel(){
             currentIndex = (currentIndex + index) % questionBank.size
         }
     }
-
-    fun checkAnswer(userAnswer: Boolean): Boolean{
-
-        val messageResId = if (userAnswer == currentQuestionAnswer) {
-            responseBank[currentIndex] = Response(questionBank[currentIndex],1)
-            true
-        } else {
-            responseBank[currentIndex] = Response(questionBank[currentIndex],0)
-            false
+    fun getCheater():Boolean?{
+        if(responseBank[currentIndex]==null){
+            return null
+        }else {
+            return responseBank[currentIndex]!!.isCheater
         }
+    }
+
+    fun setCheater(cheater: Boolean){
+        //responseBank[currentIndex] = Response(questionBank[currentIndex],0,cheater)
+        checkAnswer(false,true)
+    }
+
+    fun checkAnswer(userAnswer: Boolean, isCheater: Boolean): Boolean{
+        val messageResId = if(isCheater){
+            responseBank[currentIndex] = Response(questionBank[currentIndex], 0, isCheater)
+            false
+        }else{
+            if (userAnswer == currentQuestionAnswer) {
+                responseBank[currentIndex] = Response(questionBank[currentIndex], 1, isCheater)
+                true
+            } else {
+                responseBank[currentIndex] = Response(questionBank[currentIndex], 0, isCheater)
+                false
+            }
+        }
+
         countAnswers++
         if(countAnswers == responseBank.size){
             allAnswers = true
@@ -69,7 +86,9 @@ class QuizViewModel : ViewModel(){
     fun getResult(): Double {
         var i =0.0
         responseBank.forEach { element ->
-            i = element!!.answer + i
+            if(!element!!.isCheater){
+                i = element!!.answer + i
+            }
         }
         return (i/countAnswers)*100
     }
