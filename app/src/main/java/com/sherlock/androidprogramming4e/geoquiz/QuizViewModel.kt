@@ -15,6 +15,10 @@ class QuizViewModel : ViewModel(){
     private var currentIndex = 0
     private var responseBank = arrayOfNulls<Response>(questionBank.size)
     private var countAnswers = 0
+    private var countCheaters = 0
+
+    fun addCountCheaters() : Int = countCheaters ++
+
     private var allAnswers = false
 
     val currentQuestionAnswer: Boolean

@@ -215,8 +215,12 @@ class MainActivity : AppCompatActivity() {
             if(isCheater){
                 if(quizViewModel.getCheater()==null) {
                     quizViewModel.checkAnswer(false,true)
+                    if(quizViewModel.addCountCheaters()==2){
+                        cheatButton.isEnabled = false
+                    }
                     trueButton.isEnabled = false
                     falseButton.isEnabled = false
+
                     if(quizViewModel.isAllAnswers()){
                         showResult()
                     }
