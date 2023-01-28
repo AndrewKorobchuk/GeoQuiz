@@ -1,7 +1,10 @@
 package com.sherlock.androidprogramming4e.geoquiz
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -46,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         ViewModelProviders.of(this).get(QuizViewModel::class.java)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
@@ -102,7 +106,30 @@ class MainActivity : AppCompatActivity() {
         cheatButton.setOnClickListener{view: View ->
             val answerIsTrue = quizViewModel.currentQuestionAnswer
             val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
-            startActivityForResult(intent, REQUEST_CODE_CHEAT)
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                /**
+                 * Используем класс ActivityOptions, чтобы настроить запуск activity.
+                 * В приведенном выше коде вы вызываете функцию makeClipRevealAnimation(...),
+                 * чтобы указать, что CheatActivity должен использовать анимацию отображения.
+                 * Значения, которые вы передаете в makeClipRevealAnimation(...), указывают на объект,
+                 * который следует использовать как источник анимации (в данном случае кнопка CHEAT!),
+                 * положение x и y (относительно источника) для начала отображения новой activity,
+                 * а также начальную ширину и высоту новой activity
+                 */
+                val options = ActivityOptions
+                    .makeClipRevealAnimation(view, 0, 0, view.width, view.height)
+
+                /**
+                 * Вызваем функцию options.toBundle(), чтобы упаковать ActivityOptions в объект Bundle,
+                 * а затем передаем их в функцию startActivityForResult(...).
+                 * ActivityManager использует пакет опций, чтобы определить, как вывести вашу activity
+                 * на экран
+                 */
+                startActivityForResult(intent, REQUEST_CODE_CHEAT, options.toBundle())
+            }else{
+                startActivityForResult(intent, REQUEST_CODE_CHEAT)
+            }
         }
         updateQuestion(0)
     }
