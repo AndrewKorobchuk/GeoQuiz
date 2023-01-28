@@ -67,7 +67,8 @@ class MainActivity : AppCompatActivity() {
 
         aboutButton = findViewById(R.id.about_button)
         aboutButton.setOnClickListener { view: View ->
-
+            val intent = Intent(this, AboutActivity::class.java)
+            startActivity(intent)
         }
 
         trueButton.setOnClickListener { view: View ->
