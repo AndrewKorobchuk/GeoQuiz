@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var questionTextView: TextView
 
-    //private lateinit var aboutButton: Button
+    private lateinit var aboutButton: Button
     private var isCheater = false
 
     /**
@@ -65,10 +65,10 @@ class MainActivity : AppCompatActivity() {
 
         questionTextView = findViewById(R.id.question_text_view)
 
-        //aboutButton = findViewById(R.id.about_button)
-        //aboutButton.setOnClickListener { view: View ->
+        aboutButton = findViewById(R.id.about_button)
+        aboutButton.setOnClickListener { view: View ->
 
-        //}
+        }
 
         trueButton.setOnClickListener { view: View ->
             checkAnswer(true)
