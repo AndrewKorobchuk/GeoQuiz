@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProviders
 private const val TAG = "MainActivity"
 private const val KEY_INDEX = "index"
 private const val REQUEST_CODE_CHEAT = 0
+private const val MAX_COUNT_CHEAT = 3
 
 class MainActivity : AppCompatActivity() {
     private lateinit var trueButton: Button
@@ -31,6 +32,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var questionTextView: TextView
 
     private lateinit var aboutButton: Button
+    private lateinit var hintsUsedTextView: TextView
+    private lateinit var currentAnswerTextView: TextView
+    private lateinit var yourAnswerTextView: TextView
     private var isCheater = false
 
     /**
@@ -49,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         ViewModelProviders.of(this).get(QuizViewModel::class.java)
     }
 
-    @SuppressLint("RestrictedApi")
+    @SuppressLint("RestrictedApi", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
@@ -74,6 +78,15 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, AboutActivity::class.java)
             startActivity(intent)
         }
+
+        hintsUsedTextView = findViewById(R.id.hints_used)
+        hintsUsedTextView.setText(quizViewModel.getCountCheaters().toString() +" out of " + MAX_COUNT_CHEAT)
+
+        currentAnswerTextView = findViewById(R.id.current_answer)
+        currentAnswerTextView.setText("")
+
+        yourAnswerTextView = findViewById(R.id.your_answer)
+        yourAnswerTextView.setText("")
 
         trueButton.setOnClickListener { view: View ->
             checkAnswer(true)
@@ -141,6 +154,8 @@ class MainActivity : AppCompatActivity() {
         questionTextView.setText(questionTextResId)
         trueButton.isEnabled = !quizViewModel.answerEnable()
         falseButton.isEnabled = !quizViewModel.answerEnable()
+        yourAnswerTextView.setText(quizViewModel.getYourAnswer())
+        currentAnswerTextView.setText(quizViewModel.getAnswer())
     }
 
     private fun checkAnswer(userAnswer: Boolean) {
@@ -215,12 +230,14 @@ class MainActivity : AppCompatActivity() {
             if(isCheater){
                 if(quizViewModel.getCheater()==null) {
                     quizViewModel.checkAnswer(false,true)
-                    if(quizViewModel.addCountCheaters()==2){
+                    if(quizViewModel.addCountCheaters()==MAX_COUNT_CHEAT){
                         cheatButton.isEnabled = false
                     }
+                    hintsUsedTextView.setText(quizViewModel.getCountCheaters().toString() +" out of " + MAX_COUNT_CHEAT)
                     trueButton.isEnabled = false
                     falseButton.isEnabled = false
-
+                    yourAnswerTextView.setText("CHEAT")
+                    currentAnswerTextView.setText(quizViewModel.getAnswer())
                     if(quizViewModel.isAllAnswers()){
                         showResult()
                     }

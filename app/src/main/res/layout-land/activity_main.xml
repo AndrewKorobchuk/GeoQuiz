@@ -18,20 +18,83 @@
             android:padding="24dp"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/linear_layout_true_false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/question_australia" />
+
+        <Button
+            android:id="@+id/cheat_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:text="@string/cheat_button"
+            app:layout_constraintBottom_toTopOf="@id/linearLayout6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/question_text_view" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cheat_button">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hints_used"/>
+            <TextView
+                android:id="@+id/hints_used"
+                android:layout_marginStart="@dimen/margin_5_dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/hints_used"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/your_answer"/>
+            <TextView
+                android:layout_marginStart="@dimen/margin_5_dp"
+                android:id="@+id/your_answer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/your_answer"/>
+            <TextView
+                android:layout_marginStart="@dimen/margin_15_dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/current_answer"/>
+            <TextView
+                android:layout_marginStart="@dimen/margin_5_dp"
+                android:id="@+id/current_answer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/current_answer"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linear_layout_true_false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
 
             <Button
                 android:id="@+id/true_button"
@@ -48,16 +111,8 @@
                 android:text="@string/false_button" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/cheat_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:text="@string/cheat_button"
-            app:layout_constraintBottom_toTopOf="@+id/linear_layout_true_false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/question_text_view" />
+
+
 
         <LinearLayout
             android:id="@+id/linearLayout"

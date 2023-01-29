@@ -71,9 +71,52 @@
                 android:text="@string/hints_used"/>
             <TextView
                 android:id="@+id/hints_used"
+                android:layout_marginStart="@dimen/margin_5_dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="@string/hints_used"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/your_answer"/>
+            <TextView
+                android:id="@+id/your_answer"
+                android:layout_marginStart="@dimen/margin_5_dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/your_answer"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/current_answer"/>
+            <TextView
+                android:id="@+id/current_answer"
+                android:layout_marginStart="@dimen/margin_5_dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/current_answer"/>
 
         </LinearLayout>
 
@@ -84,7 +127,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout8">
 
             <Button
                 android:id="@+id/prev_button"

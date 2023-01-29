@@ -17,7 +17,9 @@ class QuizViewModel : ViewModel(){
     private var countAnswers = 0
     private var countCheaters = 0
 
+
     fun addCountCheaters() : Int = countCheaters ++
+    fun getCountCheaters() : Int = countCheaters
 
     private var allAnswers = false
 
@@ -89,4 +91,29 @@ class QuizViewModel : ViewModel(){
         return responseBank[currentIndex]!=null
     }
 
+    fun getAnswer(): String {
+        if(getCheater() == null){
+            return ""
+        }else{
+            if(questionBank[currentIndex].answer){
+                return "true"
+            }else{
+                return "false"
+            }
+        }
+    }
+
+    fun getYourAnswer(): String {
+        if(getCheater()==true){
+            return "CHEAT"
+        }else if(getCheater()==false){
+            if(responseBank[currentIndex]!!.answer == 1){
+                return questionBank[currentIndex].answer.toString()
+            }else{
+                return (!questionBank[currentIndex].answer).toString()
+            }
+        }else{
+            return ""
+        }
+    }
 }
