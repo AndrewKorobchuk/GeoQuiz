@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var hintsUsedTextView: TextView
     private lateinit var currentAnswerTextView: TextView
     private lateinit var yourAnswerTextView: TextView
+    private lateinit var correctAnswerRateTextView: TextView
     private var isCheater = false
 
     /**
@@ -87,6 +88,9 @@ class MainActivity : AppCompatActivity() {
 
         yourAnswerTextView = findViewById(R.id.your_answer)
         yourAnswerTextView.setText("")
+
+        correctAnswerRateTextView = findViewById(R.id.correct_answer_rate)
+        showResult()
 
         trueButton.setOnClickListener { view: View ->
             checkAnswer(true)
@@ -176,14 +180,18 @@ class MainActivity : AppCompatActivity() {
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
         updateQuestion(1)
-        if(quizViewModel.isAllAnswers()){
-            showResult()
-        }
+        showResult()
     }
 
     private fun showResult(){
-        val result = quizViewModel.getResult()
-        Toast.makeText(this, result.toString(), Toast.LENGTH_SHORT).show()
+        if(quizViewModel.isAllAnswers()) {
+            val result = quizViewModel.getResult()
+            Toast.makeText(this, result.toString(), Toast.LENGTH_SHORT).show()
+            correctAnswerRateTextView.setText(
+                String.format(
+                    getString(R.string.correct_answer_rate),
+                    result.toString()))
+        }
     }
 
     override fun onStart() {
