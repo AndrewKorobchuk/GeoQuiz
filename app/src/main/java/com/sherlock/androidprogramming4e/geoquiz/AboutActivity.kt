@@ -14,6 +14,6 @@ class AboutActivity : AppCompatActivity() {
         setContentView(R.layout.activity_about)
 
         apiLevelTextView = findViewById(R.id.api_level)
-        apiLevelTextView.setText(" " + Build.VERSION.SDK_INT.toString())
+        apiLevelTextView.setText(Build.VERSION.SDK_INT.toString())
     }
 }

@@ -25,6 +25,7 @@
                 android:text="@string/api_level"/>
 
             <TextView
+                android:layout_marginStart="@dimen/margin_5_dp"
                 android:id="@+id/api_level"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
